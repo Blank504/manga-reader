@@ -1,0 +1,154 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manga Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #222;
+        color: #ddd;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        text-align: left;
+        color: #fff;
+      }
+
+      #manga-description {
+        margin: 20px;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      #manga-cover {
+        display: block;
+        margin: 20px auto;
+        max-width: 200px;
+        height: auto;
+      }
+
+      /* Dropdown for Chapters */
+      #chapter-dropdown {
+        width: 100%;
+        margin: 20px;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      #chapter-dropdown ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: none;
+        background-color: #444;
+        border-radius: 8px;
+        position: absolute;
+        width: 100%;
+      }
+
+      #chapter-dropdown:hover ul {
+        display: block;
+      }
+
+      #chapter-dropdown li {
+        padding: 10px;
+        background-color: #555;
+        cursor: pointer;
+        text-align: center;
+        color: #fff;
+      }
+
+      #chapter-dropdown li:hover {
+        background-color: #666;
+      }
+
+      #chapter-viewer {
+        padding: 20px;
+        margin: 20px;
+        background-color: #333;
+        border-radius: 8px;
+      }
+
+      #chapter-content img {
+        max-width: 100%;
+        display: block;
+        margin: 0 auto 10px;
+      }
+
+      button {
+        background-color: #444;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        margin: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #666;
+      }
+
+      /* Back-to-Top Button */
+      #back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px;
+        background-color: #444;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+      }
+
+      #back-to-top:hover {
+        background-color: #666;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 id="manga-title">Manga Title</h1>
+    <img
+      id="manga-cover"
+      alt="Manga Cover"
+      style="width: 200px; height: auto"
+    />
+    <div id="manga-description">Description will appear here.</div>
+
+    <!-- Dropdown for Chapters -->
+    <div id="chapter-dropdown">
+      <span>Choose a Chapter</span>
+      <ul id="chapter-list">
+        <!-- Chapters will be dynamically loaded here -->
+      </ul>
+    </div>
+
+    <div id="chapter-viewer">
+      <h3>Chapter Content</h3>
+      <div id="chapter-content">Chapter content will appear here.</div>
+    </div>
+
+    <!-- Back-to-Top Button -->
+    <button id="back-to-top" onclick="scrollToTop()">Back to Top</button>
+
+    <script src="manga_details.js"></script>
+  </body>
+</html>

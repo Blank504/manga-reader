@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root"; 
 $password = ""; 
-$dbname = "manga_reader"; // Change this to your database name
+$dbname = "manga_reader"; // database name
 
 // Create connection
 $conn = new mysqli($host, $user, $password, $dbname);

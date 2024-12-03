@@ -138,3 +138,61 @@ h2 {
 .navbar ul li a:hover {
   background-color: #444;
 }
+
+/* Styling for Login, Signup, and Admin forms */
+.auth-form {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 50px auto;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  color: #ddd;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #222;
+  color: #ddd;
+}
+
+input:focus {
+  border-color: #555;
+  outline: none;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #444;
+  color: #ddd;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #555;
+}
+
+button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+/* Remove extra space when favorites are hidden */
+#favorites {
+  display: none;
+}
