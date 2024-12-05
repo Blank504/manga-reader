@@ -1,29 +1,22 @@
 <?php
-include 'db_connection.php';
+// Include database connection
+include('db_connection.php');
 
+// Get data from POST request
 $username = $_POST['username'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password before storing
+$password = $_POST['password'];
 
-$sql = "SELECT * FROM user WHERE username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+// Hash the password before storing it in the database
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-if ($result->num_rows > 0) {
-    echo json_encode(['status' => 'error', 'message' => 'Username already exists']);
+// Insert user into the database
+$sql = "INSERT INTO user (username, password) VALUES ('$username', '$hashed_password')";
+
+if (mysqli_query($conn, $sql)) {
+    echo json_encode(['status' => 'success', 'message' => 'User registered successfully.']);
 } else {
-    $sql = "INSERT INTO user (username, password) VALUES (?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $password);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to register']);
-    }
+    echo json_encode(['status' => 'error', 'message' => 'Error registering user.']);
 }
 
-$stmt->close();
-$conn->close();
+mysqli_close($conn);
 ?>

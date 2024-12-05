@@ -8,7 +8,7 @@ if (isset($_GET['manga_id'])) {
     $manga_id = $_GET['manga_id'];
 
     // Query to fetch manga details based on the manga_id
-    $sql = "SELECT * FROM manga_reader WHERE manga_id = '$manga_id'"; // Assuming you have a 'manga' table with manga details
+    $sql = "SELECT * FROM favorites WHERE manga_id = '$manga_id'"; // Assuming you have a 'manga' table with manga details
     $result = mysqli_query($conn, $sql);
 
     // If the query is successful and returns results

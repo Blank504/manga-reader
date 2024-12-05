@@ -9,9 +9,29 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- Navbar -->
-    <div class="navbar" id="navbar"></div>
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu" id="hamburger-menu">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
 
+    <!-- Sidebar (Hidden by default) -->
+    <div class="navbar" id="navbar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+
+        <li><a href="login.html" id="login-link">Login</a></li>
+        <li><a href="signup.html" id="signup-link">Signup</a></li>
+        <li><a href="admin.html" id="admin-link">Admin</a></li>
+        <li>
+          <a href="favorites.html" id="favorites-link" style="display: none"
+            >Favorites</a
+          >
+        </li>
+        <li><a href="#" id="logout-link" style="display: none">Logout</a></li>
+      </ul>
+    </div>
     <header>
       <h1>Admin Page</h1>
     </header>
@@ -41,5 +61,6 @@
       </form>
     </main>
     <script src="script.js"></script>
+    <script src="logout.js"></script>
   </body>
 </html>
