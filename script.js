@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const mangaGrid = document.getElementById("manga-grid");
   const searchInput = document.getElementById("search");
+  const searchButton = document.getElementById("search-btn"); // Search button element
   const loadingIndicator = document.getElementById("loading-indicator");
   const hamburgerMenu = document.getElementById("hamburger-menu");
   const navbar = document.getElementById("navbar");
@@ -20,6 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
       navbar.classList.toggle("open");
     });
   }
+
+  // Handle search button click
+  searchButton.addEventListener("click", () => {
+    const searchQuery = searchInput.value.trim();
+    if (searchQuery) {
+      mangaGrid.innerHTML = ""; // Clear existing manga grid before new search
+      fetchManga(1, searchQuery); // Start the search with page 1 and search query
+    }
+  });
 
   // Fetch manga data
   function fetchManga(page, searchQuery = "") {
@@ -76,10 +86,16 @@ document.addEventListener("DOMContentLoaded", () => {
             card.classList.add("card");
             card.innerHTML = `
               <img src="${coverUrl}" alt="${title}">
-              <h3>${title}</h3>
+              <h3 class="manga-title" data-manga-id="${manga.id}">${title}</h3>
               <button class="favorite-button" data-manga-id="${manga.id}">Add to Favorites</button>
             `;
             mangaGrid.appendChild(card);
+
+            // Event listener for clicking on the manga title
+            const titleElement = card.querySelector(".manga-title");
+            titleElement.addEventListener("click", () => {
+              window.location.href = `manga_details.html?id=${mangaId}`;
+            });
 
             // Update button state to "Favorite" if already in favorites
             updateFavoriteButtonState(manga.id);
@@ -156,140 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       button.textContent = "Add to Favorites"; // Otherwise, show "Add to Favorites"
     }
-  }
-
-  // Show Favorites when the link is clicked
-  favoritesLink?.addEventListener("click", function (event) {
-    event.preventDefault();
-    hideAllSections();
-    showFavorites();
-  });
-
-  // Hide all sections except the homepage
-  function hideAllSections() {
-    const allSections = document.querySelectorAll("section");
-    allSections.forEach((section) => {
-      section.style.display = "none";
-    });
-  }
-
-  function showFavorites() {
-    favoritesSection.style.display = "block";
-    const favoritesGrid = document.getElementById("favorites-grid");
-    favoritesGrid.innerHTML = ""; // Clear existing content
-
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-    // Check if the element exists
-    if (!favoritesGrid) {
-      console.error("favorites-grid element not found");
-      return;
-    }
-
-    // Check if favorites exist
-    if (favorites.length === 0) {
-      favoritesGrid.innerHTML = "<p>No favorite manga found.</p>";
-      return;
-    }
-
-    // Fetch manga details for each favorite manga item from the database
-    favorites.forEach((mangaId) => {
-      fetch(`fetch_favorite_manga.php?manga_id=${mangaId}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch manga");
-          }
-          return response.json();
-        })
-        .then((manga) => {
-          if (manga && manga.status === "success" && manga.manga) {
-            const card = document.createElement("div");
-            card.classList.add("card");
-            card.innerHTML = `
-              <h3>${manga.manga.title}</h3>
-              <button onclick="removeFromFavorites('${manga.manga.id}')">Remove from Favorites</button>
-            `;
-            favoritesGrid.appendChild(card);
-          } else {
-            console.error("Invalid manga data:", manga);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching favorite manga details:", error);
-        });
-    });
-  }
-
-  // Function to remove manga from favorites section
-  function removeFromFavorites(mangaId) {
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    favorites = favorites.filter((id) => id !== mangaId);
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-
-    fetch("remove_favorite.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `manga_id=${mangaId}`,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          console.log("Removed from favorites");
-        } else {
-          console.error("Failed to remove from favorites");
-        }
-      })
-      .catch((error) => {
-        console.error("Error removing from favorites:", error);
-      });
-
-    showFavorites(); // Refresh the favorites list
-  }
-  // Navigate to manga detail page
-  function displayManga(mangaData) {
-    mangaData.forEach((manga) => {
-      const title = manga.attributes.title.en || "Unknown Title";
-      let coverUrl = "https://via.placeholder.com/256x400?text=No+Cover";
-
-      const coverArt = manga.relationships.find(
-        (rel) => rel.type === "cover_art"
-      );
-
-      if (coverArt) {
-        const mangaId = manga.id;
-        const coverId = coverArt.id;
-
-        fetch(`https://api.mangadex.org/cover/${coverId}`)
-          .then((res) => res.json())
-          .then((coverData) => {
-            if (coverData.data && coverData.data.attributes.fileName) {
-              const fileName = coverData.data.attributes.fileName;
-              coverUrl = `https://uploads.mangadex.org/covers/${mangaId}/${fileName}`;
-            }
-
-            const card = document.createElement("div");
-            card.classList.add("card");
-            card.innerHTML = `
-              <img src="${coverUrl}" alt="${title}">
-              <h3 class="manga-title" data-manga-id="${manga.id}">${title}</h3>
-              <button class="favorite-button" data-manga-id="${manga.id}">Add to Favorites</button>
-            `;
-            mangaGrid.appendChild(card);
-
-            // Event listener for clicking on the manga title
-            const titleElement = card.querySelector(".manga-title");
-            titleElement.addEventListener("click", () => {
-              window.location.href = `manga_details.html?id=${mangaId}`;
-            });
-
-            // Update button state to "Favorite" if already in favorites
-            updateFavoriteButtonState(manga.id);
-          })
-          .catch((error) => {
-            console.error("Failed to fetch cover image:", error);
-          });
-      }
-    });
   }
 
   // Infinite scroll functionality
